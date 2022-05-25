@@ -1,0 +1,72 @@
+<template>
+    <div class="max-w-sm w-full lg:max-w-full">
+        <div class="mb-20 rounded border-r border-b border-l border-gray-400 lg:border-l-0 lg:border-t lg:border-gray-400 bg-red-200 rounded-b lg:rounded-b-none lg:rounded-r p-4 flex flex-col justify-between leading-normal"> 
+            
+            <div class="flex justify-center">
+                <h3 class="text-center not-italic text-xl mr-10 mt-80 bold">Registro de voluntario</h3>
+                <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+                    <div class="mb-4">
+                        <label class="block text-gray-700 text-sm font-bold mb-2" for="username">Primer nombre</label>
+                        <input v-model="registro.nombre" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="username" type="text" placeholder="Nombre">
+                    </div>
+                    
+                        <label class="block text-gray-700 text-sm font-bold mb-2" for="apellido">Apellido</label>
+                        <input v-model="registro.apellido" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"  type="text" placeholder="Apellido">
+                        
+                        <label class="block text-gray-700 text-sm font-bold mb-2" for="password">Email</label>
+                        <input v-model="registro.correo" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"  type="email" placeholder="Correo electronico">
+                        
+                        <label class="block text-gray-700 text-sm font-bold mb-2" for="password">Dirección</label>
+                        <input v-model="registro.direccion" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline" placeholder="Direccion">
+
+                        <label class="block text-gray-700 text-sm font-bold mb-2" for="password">RUT</label>
+                        <input v-model="registro.rut" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline" placeholder="RUT">
+
+                        <label class="block text-gray-700 text-sm font-bold mb-2" for="password">Estado</label>
+                        <input v-model="registro.estado" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline" placeholder="Estado de salud">
+                    
+                    <div class="mb-6">
+                        <label class="block text-gray-700 text-sm font-bold mb-2" for="password">Contraseña</label>
+                        <input v-model="registro.contraseña" class="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"  type="password" placeholder="******************">
+                        
+                        <label class="block text-gray-700 text-sm font-bold mb-2" for="password">Repita la contraseña</label>
+                        <input v-model="registro.confirmar_contraseña" class="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline" type="password" placeholder="******************">
+                        <p class="text-red-500 text-xs italic">Las contraseñas deben coincidir</p>
+                    </div>
+
+                    <div class="flex items-center justify-between">
+                        <button @click="send" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">
+                            Registrar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</template>
+
+
+
+<script>
+export default {
+    name: "MainPage",
+    data() {
+        return {
+            registro: {},
+        };
+    },
+    methods: {
+        send()
+        {
+            if (this.registro.contraseña !== this.registro.confirmar_contraseña){
+                alert("Las contraseñas deben coincidir")
+            }else 
+            {
+                this.$emit('data', {nombre:this.registro.nombre, apellido: this.registro.apellido,
+                correo:this.registro.correo,direccion:this.registro.direccion,
+                rut:this.registro.rut, estado:this.registro.estado,contraseña:this.registro.contraseña})
+            }
+        }
+    }
+}
+</script>
