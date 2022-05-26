@@ -3,8 +3,9 @@
         <div class="rounded border-r border-b border-l border-gray-400 lg:border-l-0 lg:border-t lg:border-gray-400 bg-red-200 rounded-b lg:rounded-b-none lg:rounded-r p-4 flex flex-col justify-between leading-normal"> 
             
             <div class="flex justify-center">
-                <h3 class="text-center not-italic text-xl mr-10 mt-52 bold">Registro de Institución</h3>
+                
                 <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+                    <h3 class="text-center not-italic text-xl mr-10 mb-1 bold">Registro de Institución</h3>
                     <div class="mb-4">
                         <label class="block text-gray-700 text-sm font-bold mb-2" for="username">Nombre Institución</label>
                         <input v-model="registroIns.nombre" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="text" placeholder="Nombre institucion">
