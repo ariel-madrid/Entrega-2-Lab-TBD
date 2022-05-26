@@ -99,8 +99,10 @@ export default {
         },
         async getVoluntarios() {
             try {
+
                 const response = await this.$axios.get("http://localhost:8080/voluntarios");
-                this.voluntarios = response.data;
+                this.voluntarios = response.data
+                console.log(this.voluntarios)
             }
             catch (error) {
                 return error;
@@ -123,7 +125,7 @@ export default {
             if (this.voluntarios.length !== 0) {
                 this.voluntarios.forEach((voluntario) => {
                     //  Si los datos ingresados corresponden a los registrados en la base de datos se le envia a la vista de voluntarios
-                    if ((this.inicio_sesion.name === (voluntario.nombre + " " + voluntario.apellido)) && (this.inicio_sesion.password === voluntario.contraseña)) {
+                    if ((this.inicio_sesion.name === voluntario.correo) && (this.inicio_sesion.password === voluntario.contraseña)) {
                         //  Enviar a vista de voluntarios
                         tmp = 1;
                         alert("Sesion iniciada como voluntario");
@@ -173,8 +175,6 @@ export default {
                     && this.registro.estado != undefined) {
                     console.log(this.registro);
                     try {
-                        this.registro.longitud = 0;
-                        this.registro.latitud = 0;
                         await this.$axios
                             .post("http://localhost:8080/nuevo-voluntario", this.registro)
                             .then(res => res.data)
@@ -219,7 +219,6 @@ export default {
                 }
             }
             this.getInstituciones();
-            console.log(this.registroIns);
         },
         dataFromLogin(value)
         {
@@ -234,7 +233,6 @@ export default {
         },
         dataFromRegisterIns(value)
         {
-            console.log(this.registroIns)
             this.registroIns = value
             this.RegistrarInstitucion()
         }
@@ -246,7 +244,8 @@ export default {
     },
     mounted: function()
     {
-      
+        this.getVoluntarios();
+        this.getInstituciones();
     },
     components: { Card, Login, Register, RegisterInstitucion }
 }

@@ -78,7 +78,6 @@
                       <p v-if="!edit || index!=i" class="w-64 focus:outline-none text-sm leading-5 py-4 text-gray-600">Estado tarea: {{tareas[index].estado}}</p>
                       <p v-if="edit && index==i" class="w-48 focus:outline-none text-sm leading-5 py-4 text-gray-600 mt-3">Estado <input v-model="editar.estado" class="border" v-if="edit && index==i" type="text"></p>
 
-                      <p class="focus:outline-none text-sm leading-5 py-4 text-gray-600">{{tareas[index].ubicacion}}: Mostrar en un mapa</p>
                       <button v-if="!edit || index!=i" @click="editarTarea(index)" class="mt-5 mr-5 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600" type="button">Editar tarea</button>
                       <button v-if="edit && index==i" @click="guardarTarea" class="mt-5 mr-5 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600" type="button">Guardar cambios</button>
                   </div>

@@ -17,7 +17,7 @@ public class RepositorieVoluntarioIMP implements RepositorieVoluntario
     //OBTENER A TODOS LOS VOLUNTARIOS (Metodo GET)
     @Override
     public List<Voluntario> getAll() {
-        String sql = "SELECT * FROM voluntario";
+        String sql = "SELECT id, nombre, apellido, contrasena, correo, latitud, longitud, rut, estado FROM voluntario";
         try(Connection conn = sql2o.open()){
             return (List<Voluntario>) conn.createQuery(sql).executeAndFetch(Voluntario.class);   
         } catch (Exception e) {
