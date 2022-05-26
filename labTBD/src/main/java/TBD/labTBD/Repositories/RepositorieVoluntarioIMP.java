@@ -75,8 +75,11 @@ public class RepositorieVoluntarioIMP implements RepositorieVoluntario
     //La verificacion de si existe el voluntario se realiza en el front
     @Override
     public Voluntario createVoluntario(Voluntario voluntario) {
-        String sql = "INSERT INTO voluntario (id, nombre, apellido, correo,contrasena,direccion,rut,estado) VALUES(:id, :nombre, :apellido, :correo,:contrasena,:direccion,:rut,:estado)";
+        String sql = "INSERT INTO voluntario (id, nombre, apellido, correo,contrasena,direccion,rut,estado,latitud,longitud,location) " +
+        "VALUES(:id, :nombre, :apellido, :correo,:contrasena,:direccion,:rut,:estado,:latitud,:longitud, ST_GeomFromText(:point, 4326))";
         
+        String point = "POINT("+voluntario.getLatitud()+" "+voluntario.getLongitud()+")";
+
         try (Connection con = sql2o.open()) {
             int id = (int) con.createQuery(sql,true)
             .addParameter("id", voluntario.getId())
@@ -87,6 +90,9 @@ public class RepositorieVoluntarioIMP implements RepositorieVoluntario
             .addParameter("direccion",voluntario.getDireccion())
             .addParameter("rut", voluntario.getRut())
             .addParameter("estado", voluntario.getEstado())
+            .addParameter("latitud", voluntario.getLatitud())
+            .addParameter("longitud", voluntario.getLongitud())
+            .addParameter("point", point)
             .executeUpdate().getKey();
 
             voluntario.setId(id);    
@@ -95,6 +101,7 @@ public class RepositorieVoluntarioIMP implements RepositorieVoluntario
         }
         catch (Exception e) {
             System.out.println(e.getCause() + e.getLocalizedMessage() + "\n");
+            
         }
         return null;
     }

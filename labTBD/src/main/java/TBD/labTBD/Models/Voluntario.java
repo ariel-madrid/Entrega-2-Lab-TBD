@@ -10,11 +10,25 @@ public class Voluntario
     private String direccion;
     private String rut;
     private String estado;
+    private float latitud;
+    private float longitud;
 
     //Getters
     public int getId()
     {
         return this.id;
+    }
+    public float getLatitud() {
+        return latitud;
+    }
+    public void setLatitud(float latitud) {
+        this.latitud = latitud;
+    }
+    public float getLongitud() {
+        return longitud;
+    }
+    public void setLongitud(float longitud) {
+        this.longitud = longitud;
     }
     public String getNombre()
     {

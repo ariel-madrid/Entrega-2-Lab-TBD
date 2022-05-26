@@ -157,12 +157,12 @@ export default {
             this.getVoluntarios();
             num = this.voluntarios.length;
             this.registro.id = num + 1;
-            this.voluntarios.forEach((voluntario) => {
-                if (voluntario.correo === this.registro.correo) {
+            for(let i =0; i<this.voluntarios.length;i++) {
+                if (this.voluntarios[i].correo === this.registro.correo) {
                     alert("El correo electronico ya se encuentra registrado");
                     flag = 1;
                 }
-            });
+            }
             if (flag == 0) {
                 if (this.registro.nombre != undefined
                     && this.registro.apellido != undefined
@@ -173,6 +173,8 @@ export default {
                     && this.registro.estado != undefined) {
                     console.log(this.registro);
                     try {
+                        this.registro.longitud = 0;
+                        this.registro.latitud = 0;
                         await this.$axios
                             .post("http://localhost:8080/nuevo-voluntario", this.registro)
                             .then(res => res.data)

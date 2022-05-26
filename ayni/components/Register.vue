@@ -19,6 +19,8 @@
                         
                         <label class="block text-gray-700 text-sm font-bold mb-2" for="password">Dirección</label>
                         <input v-model="registro.direccion" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline" placeholder="Direccion">
+                        
+                        <div id = "map"></div>
 
                         <label class="block text-gray-700 text-sm font-bold mb-2" for="password">RUT</label>
                         <input v-model="registro.rut" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline" placeholder="RUT">
@@ -49,16 +51,33 @@
 
 
 <script>
+// Importaciones para usar leaflet
+import "leaflet/dist/leaflet"; 
+import "leaflet/dist/leaflet.css";
+var icon = require("leaflet/dist/images/marker-icon.png"); 
+var LeafIcon = L.Icon.extend({
+  options: { iconSize: [25, 41], iconAnchor: [12, 41], popupAnchor: [-3, -41] },
+});
+var myIcon = new LeafIcon({ iconUrl: icon });
 export default {
     name: "MainPage",
     data() {
         return {
             registro: {},
+            latitude: null,
+            longitude: null
         };
     },
     methods: {
         send()
         {
+            alert(this.latitude +" "+this.longitude)
+            let newPoint = { 
+                name: this.name,
+                latitude: this.latitude,
+                longitude: this.longitude,
+                cod_regi: this.cod_regi
+            };
             if (this.registro.contraseña !== this.registro.confirmar_contraseña){
                 alert("Las contraseñas deben coincidir")
             }else 
@@ -68,6 +87,30 @@ export default {
                 rut:this.registro.rut, estado:this.registro.estado,contraseña:this.registro.contraseña})
             }
         }
+    },
+    mounted: async function(){
+        let _this = this
+        this.mymap = L.map("map").setView([-33.456, -70.648], 7);
+        //Se definen los mapas de bits de OSM
+        L.tileLayer("http://{s}.tile.osm.org/{z}/{x}/{y}.png", {
+        attribution:
+            '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+        maxZoom: 15,
+        }).addTo(this.mymap);
+
+        this.mymap.on("click", function (e) {
+            _this.latitude = e.latlng.lat;
+            _this.longitude = e.latlng.lng;
+            console.log(e)
+        });
+        
     }
 }
 </script>
+
+<style>
+    #map {
+        width: 400px;
+        aspect-ratio: 16/9;
+    }
+</style>
