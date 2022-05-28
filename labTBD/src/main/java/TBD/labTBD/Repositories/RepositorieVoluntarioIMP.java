@@ -120,9 +120,10 @@ public class RepositorieVoluntarioIMP implements RepositorieVoluntario {
     @Override
     public List<Voluntario> getVoluntariosFromEmergencia(int emergenciaId) {
 
-        final String voluntarioQuery = "SELECT *" +
-                "FROM tarea, voluntariotarea, voluntario" +
-                "WHERE tarea.emergencia = emergenciaId, tarea.id = voluntariotarea.idtarea AND voluntariotarea.idvoluntario = voluntario.id";
+        final String voluntarioQuery = "SELECT * " +
+                "FROM tarea, voluntariotarea, voluntario " +
+                "WHERE tarea.emergencia = " + emergenciaId
+                + "AND tarea.id = voluntariotarea.idtarea AND voluntariotarea.idvoluntario = voluntario.id;";
 
         try (Connection conn = sql2o.open()) {
             return conn.createQuery(voluntarioQuery)
