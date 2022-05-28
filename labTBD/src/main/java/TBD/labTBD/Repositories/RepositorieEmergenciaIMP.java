@@ -16,7 +16,7 @@ public class RepositorieEmergenciaIMP implements RepositorieEmergencia {
 
     @Override
     public List<Emergencia> getAll() {
-        String sql = "SELECT * FROM emergencia";
+        String sql = "SELECT id, nombre, descripcion, id_coordinador, fecha, ubicacion, latitud, longitud FROM emergencia";
         try (Connection conn = sql2o.open()) {
             return (List<Emergencia>) conn.createQuery(sql).executeAndFetch(Emergencia.class);
         } catch (Exception e) {
@@ -60,24 +60,30 @@ public class RepositorieEmergenciaIMP implements RepositorieEmergencia {
             System.out.println(e.getMessage() + e.getLocalizedMessage() + " error al elminar la habilidad\n");
         }
 
-    }
+    } 
 
     @Override
-    public Emergencia crearEmergencia(Emergencia EmergenciaNew) {
-        String sql = "INSERT INTO emergencia (nombre, descripcion, id_coordinador, fecha, ubicacion) VALUES(:nombre, :descripcion, :id_coordinador, :fecha, :ubicacion)";
+    public Emergencia crearEmergencia(Emergencia emergencia) { 
+        String sql = "INSERT INTO emergencia (id, nombre, descripcion, id_coordinador, fecha, ubicacion, latitud, longitud, location) " +
+        "VALUES(:id, :nombre, :descripcion, :id_coordinador, :fecha, :ubicacion, :latitud, :longitud, ST_GeomFromText(:point, 4326))";
+        
+        String point = "POINT("+emergencia.getLatitud()+" "+emergencia.getLongitud()+")";
 
         try (Connection con = sql2o.open()) {
             int id = (int) con.createQuery(sql, true)
-                    .addParameter("nombre", EmergenciaNew.getNombre())
-                    .addParameter("descripcion", EmergenciaNew.getDescripcion())
-                    .addParameter("id_coordinador", EmergenciaNew.getId_coordinador())
-                    .addParameter("fecha_inicio", EmergenciaNew.getFecha())
-                    .addParameter("ubicacion", EmergenciaNew.getUbicacion())
-                    .executeUpdate().getKey();
+            .addParameter("id", emergencia.getId())
+            .addParameter("nombre", emergencia.getNombre())
+            .addParameter("descripcion", emergencia.getDescripcion())
+            .addParameter("id_coordinador", emergencia.getId_coordinador())
+            .addParameter("fecha", emergencia.getFecha())
+            .addParameter("ubicacion", emergencia.getUbicacion())
+            .addParameter("latitud", emergencia.getLatitud())
+            .addParameter("longitud", emergencia.getLongitud())
+            .addParameter("point", point)
+            .executeUpdate().getKey();
 
-            EmergenciaNew.setId(id);
-
-            return EmergenciaNew;
+            emergencia.setId(id);
+            return emergencia;
 
         } catch (Exception e) {
             System.out.println(e.getCause() + e.getLocalizedMessage() + "\n");

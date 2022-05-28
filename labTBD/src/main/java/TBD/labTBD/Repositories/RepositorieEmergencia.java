@@ -8,11 +8,11 @@ public interface RepositorieEmergencia {
 
     public List<Emergencia> getAll();
 
-    public void update(Emergencia EmergenciaUpdate);
+    public void update(Emergencia emergencia);
 
     public void delete(int id);
 
-    public Emergencia crearEmergencia(Emergencia EmergenciaNew);
+    public Emergencia crearEmergencia(Emergencia emergencia);
 
     public Emergencia getById(int id);
 }

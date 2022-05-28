@@ -15,6 +15,9 @@
                     <div class="hidden w-full md:block md:w-auto" id="mobile-menu">
                     <ul class="flex flex-col mt-4 md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium">
                         <li>
+                        <button @click="nuevaEmergencia" class="block text-gray-800 bg-transparent hover:bg-orange-300 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-orange-300 dark:hover:bg-transparent">Crear Emergencia</button>    
+                        </li>
+                        <li>
                         <button @click="emergencias" class="block text-gray-800 bg-transparent hover:bg-orange-300 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-orange-300 dark:hover:bg-transparent">Ver Emergencias</button>
                         </li>
                         <li>
@@ -48,17 +51,20 @@
                 </div>
             </div>
         </div>
+
   </div>
 </template>
 
 <script>
 
 export default ({
+    name: "MainPage",
     data(){
         return {
             loged: {},
             created: false,
-            datosIns: {}
+            datosIns: {},
+            registro: {},
         };
     },
     methods: {
@@ -67,6 +73,10 @@ export default ({
             console.log(this.datosIns)
             this.$router.push({ name: "index", path: "/"});
         },
+        nuevaEmergencia()
+        {   
+            this.$router.push({ name: "crearEmergencia", path: "/crearEmergencia"});
+        },
         emergencias()
         {
             this.$router.push({ name: "verEmergencias", path: "/verEmergencias"});
@@ -74,13 +84,22 @@ export default ({
         nuevaTarea()
         {
             this.$router.push({ name: "crearTarea", path: "/crearTarea"});
-        }
+        },
+        
     },
     created: function()
     {
         this.created = true
+        
         this.loged.name = localStorage.getItem('loged', this.loged);
         this.datosIns = localStorage.getItem('institucion', this.datosIns);
-    }
+    },
+    mounted: function()
+    {
+        
+    },
+    components: {}
+
+    
 })
 </script>

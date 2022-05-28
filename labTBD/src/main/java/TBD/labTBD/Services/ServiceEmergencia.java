@@ -33,8 +33,8 @@ public class ServiceEmergencia {
     }
 
     // Metodo crear
-    @RequestMapping(value = "/newEmergencia", method = RequestMethod.POST)
-    public Emergencia createFilm(@RequestBody Emergencia emergencia) {
+    @RequestMapping(value = "/nuevaEmergencia", method = RequestMethod.POST)
+    public Emergencia crearEmergencia(@RequestBody Emergencia emergencia) {
         return repositorieEmergencia.crearEmergencia(emergencia);
     }
 
