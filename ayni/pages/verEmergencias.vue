@@ -25,6 +25,10 @@
             </nav>
       </div>
 
+      <div class="flex flex-row justify-center">
+        <div id="emergencymap">
+        </div>  
+      </div>
       <div class="flex flex-row">
         <div class="focus:outline-none py-8 w-full">
           <div class="lg:flex items-center justify-center flex-col gap-4">
@@ -43,10 +47,9 @@
                   <div class="px-2">
                       <p class="focus:outline-none text-sm leading-5 py-4 text-gray-600">{{emergencias[index].descripcion}}</p>
                   </div>
-                  <div>
-                    <div class = "mt-2" id="emergencymap">
-                    </div>
-                  </div>
+                  <button @click="mostrarVoluntariosEmergencia(emergencias[index].id)">
+                    Mostrar voluntarios de emergencia en el mapa
+                  </button>
               </div>
           </div>
         </div>
@@ -115,8 +118,10 @@
               </div>
           </div>
         </div>
-      </div>    
+      </div> 
+ 
   </div>
+  
 </template>
 
 <script>
@@ -146,11 +151,19 @@ export default ({
             i: null,
             editar: {},
             editando: null,
-            mymap: null,
+            verMapa: false,
+            mymap: null
         }
     },
     methods: {
-        async getEmergencias(){
+          async mostrarVoluntariosEmergencia(emergencyId){
+          try{
+            let response = await this.$axios.get('http://localhost:8080/getVoluntariosFromEmergencias/' + emergencyId);
+          }catch (error) {
+            console.log("error", error);
+          }
+        },
+      async getEmergencias(){
            try {
             console.log(this.emergencias)
             let response = await this.$axios.get('http://localhost:8080/emergencias');
@@ -160,17 +173,15 @@ export default ({
             } catch (error) {
                 console.log('error', error);
             } 
-        },
-        crearTarea()
-        {
-          this.$router.push({ name: 'crearTarea', path: '/crearTarea'})
-        },
-        home()
-        {
+      },
+      crearTarea(){
+        this.$router.push({ name: 'crearTarea', path: '/crearTarea'})
+      },
+      home(){
             console.log(this.datosIns)
             this.$router.push({ name: "index", path: "/"});
-        },
-        async verEmergencia(userLogeado,emergencia,nombreEmergencia)
+      },
+      async verEmergencia(userLogeado,emergencia,nombreEmergencia)
         {
           this.em = emergencia
           this.tareas = []
@@ -192,8 +203,8 @@ export default ({
               console.log('error', error);
           }
           
-        },
-        async verVoluntarios(idTarea,e,tareaSe)
+      },
+      async verVoluntarios(idTarea,e,tareaSe)
         {
           this.tareaSeleccionada = tareaSe
           this.showVolunteer = true
@@ -230,19 +241,16 @@ export default ({
           {
             console.log(e)
           }
-        },
-        volver()
-        {
-          this.$router.push({ name: "coordinador", path: "/coordinador"});
-        },
-        editarTarea(index)
-        {
-          this.edit = true
-          this.i = index
-          this.editando = index
-        },
-        guardarTarea()
-        {
+      },
+      volver(){
+        this.$router.push({ name: "coordinador", path: "/coordinador"});
+      },
+      editarTarea(index){
+        this.edit = true
+        this.i = index
+        this.editando = index
+      },
+      guardarTarea(){
           this.edit = false
           //Enviar tarea al backend
           if (this.editar.nombre != null){
@@ -273,7 +281,7 @@ export default ({
 
           //Realizar UPDATE en el backend
           this.ActualizarTarea()
-        },
+      },
         async ActualizarTarea() {
           try {
             let response = await this.$axios.put("http://localhost:8080/tarea/actualizar",this.tareas[this.editando]);
@@ -281,46 +289,42 @@ export default ({
             console.log("error", error);
           }
           alert("Datos actualizados correctamente")
+        },
+        async getEmergencias(){
+          try {
+            console.log(this.emergencias)
+            let response = await this.$axios.get('http://localhost:8080/emergencias');
+            this.emergencias = response.data;
+            console.log(this.emergencias)
+            console.log(response) 
+          } catch (error) {
+              console.log('error', error);
+          } 
         }
 
     },
   //Función que se ejecuta al cargar el componente
   created: async function() {
-      
       let username = this.$route.params.username;
       this.userLogeado = username;
-      
   },
-  mounted: async function(){
-    let _this = this;
-     
+  mounted: function(){
+
     this.mymap = L.map("emergencymap").setView([-33.456, -70.648], 7);
+          // Se definen los mapas de bits de OSM
+          L.tileLayer("http://{s}.tile.osm.org/{z}/{x}/{y}.png", {
+            attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+            maxZoom: 15,
+    }).addTo(this.mymap); 
 
-    // Se definen los mapas de bits de OSM
-    L.tileLayer("http://{s}.tile.osm.org/{z}/{x}/{y}.png", {
-      attribution:
-          '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
-      maxZoom: 15,
-    }).addTo(this.mymap);
-
-    try {
-        console.log(this.emergencias)
-        let response = await this.$axios.get('http://localhost:8080/emergencias');
-        this.emergencias = response.data;
-        console.log(this.emergencias)
-        console.log(response) 
-      } catch (error) {
-          console.log('error', error);
-      } 
-
-            
-    },
+    this.getEmergencias();
+  },
 })
 </script>
 
 <style>
-#emergencymap { 
-  height: 400px; 
-  width: 600px;
+#emergencymap {
+  width: 400px;
+  aspect-ratio: 16/9;
 }
 </style>
