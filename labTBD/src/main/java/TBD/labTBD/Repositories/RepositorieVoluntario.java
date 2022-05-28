@@ -14,4 +14,6 @@ public interface RepositorieVoluntario {
     public Voluntario createVoluntario(Voluntario voluntario);
 
     public Voluntario getById(int id);
+
+    public List<Voluntario> getVoluntariosFromEmergencia(int emergenciaId);
 }
