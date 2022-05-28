@@ -120,11 +120,12 @@ public class RepositorieVoluntarioIMP implements RepositorieVoluntario {
     @Override
     public List<Voluntario> getVoluntariosFromEmergencia(int emergenciaId) {
 
-        final String voluntarioQuery = "SELECT * " +
-                "FROM tarea, voluntariotarea, voluntario " +
+        final String voluntarioQuery = "SELECT v.id, v.nombre, v.apellido, v.contrasena, v.correo, v.latitud, v.longitud, v.rut, v.estado " +
+                "FROM tarea, voluntariotarea, voluntario as v " +
                 "WHERE tarea.emergencia = " + emergenciaId
-                + "AND tarea.id = voluntariotarea.idtarea AND voluntariotarea.idvoluntario = voluntario.id;";
+                + "::text AND tarea.id = voluntariotarea.idtarea AND voluntariotarea.idvoluntario = v.id;";
 
+        System.out.println(voluntarioQuery);
         try (Connection conn = sql2o.open()) {
             return conn.createQuery(voluntarioQuery)
                     .executeAndFetch(Voluntario.class);
