@@ -158,7 +158,20 @@ export default ({
     methods: {
           async mostrarVoluntariosEmergencia(emergencyId){
           try{
-            let response = await this.$axios.get('http://localhost:8080/getVoluntariosFromEmergencias/' + emergencyId);
+            let response = await this.$axios.get('http://localhost:8080/voluntarioEmergencia/' + emergencyId);
+            let dataPoints = response.data;
+            
+            dataPoints.forEach(point => {
+  
+              // Se crea un marcador por cada punto
+              let p = [point.latitud, point.longitud];
+              let marker = L.marker(p, {icon:myIcon}) //se define el ícono del marcador
+              .bindPopup(point.name);
+              
+              marker.addTo(this.mymap);
+
+            });
+
           }catch (error) {
             console.log("error", error);
           }
