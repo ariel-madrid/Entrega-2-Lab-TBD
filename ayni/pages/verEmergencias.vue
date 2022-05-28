@@ -43,6 +43,10 @@
                   <div class="px-2">
                       <p class="focus:outline-none text-sm leading-5 py-4 text-gray-600">{{emergencias[index].descripcion}}</p>
                   </div>
+                  <div>
+                    <div class = "mt-2" id="emergencymap">
+                    </div>
+                  </div>
               </div>
           </div>
         </div>
@@ -116,6 +120,15 @@
 </template>
 
 <script>
+
+import "leaflet/dist/leaflet"; 
+import "leaflet/dist/leaflet.css";
+var icon = require("leaflet/dist/images/marker-icon.png"); 
+var LeafIcon = L.Icon.extend({
+  options: { iconSize: [25, 41], iconAnchor: [12, 41], popupAnchor: [-3, -41] },
+});
+var myIcon = new LeafIcon({ iconUrl: icon });
+
 export default ({
     data(){
         return {
@@ -132,7 +145,8 @@ export default ({
             edit: false,
             i: null,
             editar: {},
-            editando: null
+            editando: null,
+            mymap: null,
         }
     },
     methods: {
@@ -278,16 +292,35 @@ export default ({
       
   },
   mounted: async function(){
-           try {
-            console.log(this.emergencias)
-            let response = await this.$axios.get('http://localhost:8080/emergencias');
-            this.emergencias = response.data;
-            console.log(this.emergencias)
-            console.log(response) 
-            } catch (error) {
-                console.log('error', error);
-            } 
-        },
+    let _this = this;
+     
+    this.mymap = L.map("emergencymap").setView([-33.456, -70.648], 7);
+
+    // Se definen los mapas de bits de OSM
+    L.tileLayer("http://{s}.tile.osm.org/{z}/{x}/{y}.png", {
+      attribution:
+          '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+      maxZoom: 15,
+    }).addTo(this.mymap);
+
+    try {
+        console.log(this.emergencias)
+        let response = await this.$axios.get('http://localhost:8080/emergencias');
+        this.emergencias = response.data;
+        console.log(this.emergencias)
+        console.log(response) 
+      } catch (error) {
+          console.log('error', error);
+      } 
+
+            
+    },
 })
 </script>
 
+<style>
+#emergencymap { 
+  height: 400px; 
+  width: 600px;
+}
+</style>
