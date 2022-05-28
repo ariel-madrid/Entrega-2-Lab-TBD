@@ -151,31 +151,41 @@ export default ({
             i: null,
             editar: {},
             editando: null,
-            verMapa: false,
-            mymap: null
+            mymap: null,
+            voluntariosEmergencia: []
         }
     },
     methods: {
-          async mostrarVoluntariosEmergencia(emergencyId){
-          try{
-            let response = await this.$axios.get('http://localhost:8080/voluntarioEmergencia/' + emergencyId);
-            let dataPoints = response.data;
+      async mostrarVoluntariosEmergencia(emergencyId){
+        try{
+          let response = await this.$axios.get('http://localhost:8080/voluntarioEmergencia/' + emergencyId);
+          let dataPoints = response.data;
+
+          // Limpiar mapa de anterior llamada.
+
+          this.voluntariosEmergencia.forEach( (marker) => {
+            this.mymap.removeLayer(marker);
+          });
+
+          this.voluntariosEmergencia = [];
             
-            dataPoints.forEach(point => {
+          // Añadir nuevos voluntarios de emergencia.
+
+          dataPoints.forEach(point => {
   
-              // Se crea un marcador por cada punto
-              let p = [point.latitud, point.longitud];
-              let marker = L.marker(p, {icon:myIcon}) //se define el ícono del marcador
-              .bindPopup(point.name);
-              
-              marker.addTo(this.mymap);
+          // Se crea un marcador por cada punto
+            let p = [point.latitud, point.longitud];
+            let marker = L.marker(p, {icon:myIcon}) //se define el ícono del marcador
+                          .bindPopup(point.nombre);
 
-            });
+            marker.addTo(this.mymap);
+            this.voluntariosEmergencia.push(marker);
 
-          }catch (error) {
-            console.log("error", error);
-          }
-        },
+          });
+        }catch (error) {
+          console.log("error", error);
+        }
+      },
       async getEmergencias(){
            try {
             console.log(this.emergencias)
@@ -325,7 +335,7 @@ export default ({
 
     this.mymap = L.map("emergencymap").setView([-33.456, -70.648], 7);
           // Se definen los mapas de bits de OSM
-          L.tileLayer("http://{s}.tile.osm.org/{z}/{x}/{y}.png", {
+    L.tileLayer("http://{s}.tile.osm.org/{z}/{x}/{y}.png", {
             attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
             maxZoom: 15,
     }).addTo(this.mymap); 
