@@ -70,7 +70,6 @@ export default ({
     methods: {
         home()
         {
-            console.log(this.datosIns)
             this.$router.push({ name: "index", path: "/"});
         },
         nuevaEmergencia()

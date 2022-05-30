@@ -44,13 +44,11 @@ public class RepositorieVoluntarioIMP implements RepositorieVoluntario {
                 voluntario.getEstado() + "'" +
                 " WHERE id = " +
                 voluntario.getId();
-        System.out.println(sql);
         try (Connection conn = sql2o.open()) {
 
             conn.createQuery(sql).executeUpdate();
         } catch (Exception e) {
-            System.out
-                    .println(e.getMessage() + e.getLocalizedMessage() + " Error al actualizar datos del voluntario\n");
+            System.out.println(e.getMessage() + e.getLocalizedMessage() + " Error al actualizar datos del voluntario\n");
         }
     }
 
@@ -124,8 +122,6 @@ public class RepositorieVoluntarioIMP implements RepositorieVoluntario {
                 "FROM tarea, voluntariotarea, voluntario as v " +
                 "WHERE tarea.emergencia = " + emergenciaId
                 + "::text AND tarea.id = voluntariotarea.idtarea AND voluntariotarea.idvoluntario = v.id;";
-
-        System.out.println(voluntarioQuery);
         try (Connection conn = sql2o.open()) {
             return conn.createQuery(voluntarioQuery)
                     .executeAndFetch(Voluntario.class);

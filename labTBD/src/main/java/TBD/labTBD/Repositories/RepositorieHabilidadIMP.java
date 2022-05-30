@@ -35,13 +35,11 @@ public class RepositorieHabilidadIMP implements RepositorieHabilidad {
                 habilidadUpdate.getDescripcion() + "'" +
                 " WHERE id = " +
                 habilidadUpdate.getId();
-        System.out.println(sql);
         try (Connection conn = sql2o.open()) {
 
             conn.createQuery(sql).executeUpdate();
         } catch (Exception e) {
-            System.out
-                    .println(e.getMessage() + e.getLocalizedMessage() + " Error al actualizar datos de la Habilidad\n");
+            System.out.println(e.getMessage() + e.getLocalizedMessage() + " Error al actualizar datos de la Habilidad\n");
         }
 
     }

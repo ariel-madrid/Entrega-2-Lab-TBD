@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-green-700 box-border" v-bind:style="show==true ? 'height: auto;' : 'height: 100vh;' ">
+  <div class="bg-green-700 box-border h-auto">
       <div class="flex flex-col">
             <nav class="sticky top-0 bg-white border-gray-200 px-2 sm:px-10 py-3 rounded dark:bg-gray-800">
                 <div class="container flex flex-wrap justify-between items-center mx-auto ">
@@ -25,13 +25,15 @@
             </nav>
       </div>
 
-      <div class="flex flex-row justify-center">
-        <div id="emergencymap">
-        </div>  
-      </div>
       <div class="flex flex-row">
         <div class="focus:outline-none py-8 w-full">
           <div class="lg:flex items-center justify-center flex-col gap-4">
+
+              <div class="w-auto focus:outline-none lg:mr-7 lg:mb-0 mb-7 bg-white p-6 shadow rounded border text-center">
+                <h3 class="mb-2">{{msgVol}}</h3>
+                <div id="emergencymap"></div>  
+              </div>
+              
               <div v-for="(row, index) in emergencias" :key="index" aria-label="card 1" class="w-96 focus:outline-none lg:mr-7 lg:mb-0 mb-7 bg-white p-6 shadow rounded">
                   <div class="flex items-center border-b border-gray-200 pb-6">
                       <img src="../img/emergency-svgrepo-com.svg" alt="coin avatar" class="w-12 h-12 rounded-full" />
@@ -47,13 +49,14 @@
                   <div class="px-2">
                       <p class="focus:outline-none text-sm leading-5 py-4 text-gray-600">{{emergencias[index].descripcion}}</p>
                   </div>
-                  <button @click="mostrarVoluntariosEmergencia(emergencias[index].id)">
+                  <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" @click="mostrarVoluntariosEmergencia(emergencias[index].id)">
                     Mostrar voluntarios de emergencia en el mapa
                   </button>
+                  
               </div>
           </div>
         </div>
-
+        
         <div v-if="show" class="focus:outline-none py-8 w-full">
           <div class="lg:flex items-center justify-center flex-col gap-4">
               <div class="md:w-max focus:outline-none w-96 lg:mr-7 lg:mb-0 mb-7 bg-white p-6 shadow rounded">
@@ -129,6 +132,7 @@
 import "leaflet/dist/leaflet"; 
 import "leaflet/dist/leaflet.css";
 var icon = require("leaflet/dist/images/marker-icon.png"); 
+import $ from 'jquery'
 var LeafIcon = L.Icon.extend({
   options: { iconSize: [25, 41], iconAnchor: [12, 41], popupAnchor: [-3, -41] },
 });
@@ -152,7 +156,8 @@ export default ({
             editar: {},
             editando: null,
             mymap: null,
-            voluntariosEmergencia: []
+            voluntariosEmergencia: [],
+            msgVol: null
         }
     },
     methods: {
@@ -160,7 +165,13 @@ export default ({
         try{
           let response = await this.$axios.get('http://localhost:8080/voluntarioEmergencia/' + emergencyId);
           let dataPoints = response.data;
-
+          if (dataPoints.length == 0)
+          {
+            this.msgVol = "No hay voluntarios inscritos para la emergencia seleccionada"
+          }else 
+          {
+            this.msgVol = null
+          }
           // Limpiar mapa de anterior llamada.
 
           this.voluntariosEmergencia.forEach( (marker) => {
@@ -188,11 +199,8 @@ export default ({
       },
       async getEmergencias(){
            try {
-            console.log(this.emergencias)
             let response = await this.$axios.get('http://localhost:8080/emergencias');
             this.emergencias = response.data;
-            console.log(this.emergencias)
-            console.log(response) 
             } catch (error) {
                 console.log('error', error);
             } 
@@ -201,7 +209,6 @@ export default ({
         this.$router.push({ name: 'crearTarea', path: '/crearTarea'})
       },
       home(){
-            console.log(this.datosIns)
             this.$router.push({ name: "index", path: "/"});
       },
       async verEmergencia(userLogeado,emergencia,nombreEmergencia)
@@ -214,7 +221,6 @@ export default ({
           try {
             let response = await this.$axios.get('http://localhost:8080/tareas');
             let responseData = response.data
-            console.log(responseData)
             for (let i=0;i<responseData.length;i++)
             {
               if (responseData[i].idEmergencia == emergencia)
@@ -256,8 +262,6 @@ export default ({
                 }
               }
             });
-
-            console.log(volTarea)
             this.voluntarios = []
             this.voluntarios = volTarea
           }catch(e)
@@ -315,11 +319,8 @@ export default ({
         },
         async getEmergencias(){
           try {
-            console.log(this.emergencias)
             let response = await this.$axios.get('http://localhost:8080/emergencias');
             this.emergencias = response.data;
-            console.log(this.emergencias)
-            console.log(response) 
           } catch (error) {
               console.log('error', error);
           } 
@@ -332,15 +333,13 @@ export default ({
       this.userLogeado = username;
   },
   mounted: function(){
-
+    this.getEmergencias();
     this.mymap = L.map("emergencymap").setView([-33.456, -70.648], 7);
-          // Se definen los mapas de bits de OSM
+    // Se definen los mapas de bits de OSM
     L.tileLayer("http://{s}.tile.osm.org/{z}/{x}/{y}.png", {
             attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
             maxZoom: 15,
     }).addTo(this.mymap); 
-
-    this.getEmergencias();
   },
 })
 </script>

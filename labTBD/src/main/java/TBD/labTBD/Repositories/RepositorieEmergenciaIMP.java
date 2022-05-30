@@ -40,7 +40,6 @@ public class RepositorieEmergenciaIMP implements RepositorieEmergencia {
                 " WHERE id = " +
                 EmergenciaUpdate.getId();
         EmergenciaUpdate.getId();
-        System.out.println(sql);
         try (Connection conn = sql2o.open()) {
 
             conn.createQuery(sql).executeUpdate();

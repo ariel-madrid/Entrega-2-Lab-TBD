@@ -102,7 +102,6 @@ export default {
 
                 const response = await this.$axios.get("http://localhost:8080/voluntarios");
                 this.voluntarios = response.data
-                console.log(this.voluntarios)
             }
             catch (error) {
                 return error;
@@ -173,7 +172,6 @@ export default {
                     && this.registro.direccion != undefined
                     && this.registro.rut != undefined
                     && this.registro.estado != undefined) {
-                    console.log(this.registro);
                     try {
                         await this.$axios
                             .post("http://localhost:8080/nuevo-voluntario", this.registro)

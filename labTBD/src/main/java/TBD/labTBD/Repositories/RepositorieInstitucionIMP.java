@@ -40,7 +40,6 @@ public class RepositorieInstitucionIMP implements RepositorieInstitucion
                     institucion.getClaveCoordinador()+"'"+
                     "WHERE id = "+
                     institucion.getId();
-        System.out.println(sql);
         try(Connection conn = sql2o.open())
         {
             conn.createQuery(sql).executeUpdate();

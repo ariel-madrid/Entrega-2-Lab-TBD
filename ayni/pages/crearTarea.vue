@@ -147,13 +147,10 @@ export default {
     },
     async getEmergencias(){
       try {
-        console.log(this.emergencias)
         let response = await this.$axios.get('http://localhost:8080/emergencias');
         this.emergencias = response.data;
-        console.log(this.emergencias)
-        console.log(response) 
         } catch (error) {
-        console.log('error', error);
+          console.log('error', error);
         } 
     },
     Cancelar()

@@ -163,7 +163,6 @@ export default {
                 marker.addTo(_this.mymap)
                 _this.flag = 1
                 _this.marcador.push(marker)
-                console.log(p)
             }else 
             {
 

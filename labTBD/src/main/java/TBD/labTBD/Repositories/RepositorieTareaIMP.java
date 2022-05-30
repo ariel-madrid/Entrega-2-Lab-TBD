@@ -40,8 +40,6 @@ public class RepositorieTareaIMP implements RepositorieTarea{
         tarea.getUbicacion()+"'"+
         " WHERE id = "+
         tarea.getId();
-        
-        System.out.println(sql);
 
         try(Connection conn = sql2o.open()){
             conn.createQuery(sql).executeUpdate();
