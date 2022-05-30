@@ -29,9 +29,9 @@
         <div class="focus:outline-none py-8 w-full">
           <div class="lg:flex items-center justify-center flex-col gap-4">
 
-              <div class="w-auto focus:outline-none lg:mr-7 lg:mb-0 mb-7 bg-white p-6 shadow rounded border text-center">
+              <div class="w-auto focus:outline-none lg:mr-7 lg:mb-0 mb-7 shadow text-center">
                 <h3 class="mb-2">{{msgVol}}</h3>
-                <div id="emergencymap"></div>  
+                <div class="rounded border" id="emergencymap"></div>  
               </div>
               
               <div v-for="(row, index) in emergencias" :key="index" aria-label="card 1" class="w-96 focus:outline-none lg:mr-7 lg:mb-0 mb-7 bg-white p-6 shadow rounded">
@@ -106,7 +106,7 @@
                       <div class="flex items-start justify-between w-full">
                           <div class="pl-3 w-full">
                               <p class="focus:outline-none sm:text-sm text-xl font-medium leading-5 text-gray-800">
-                                {{voluntarios[index].nombre}}
+                                {{voluntarios[index].nombre}} {{voluntarios[index].apellido}}
                               </p>
                               <p class="focus:outline-none text-sm leading-normal pt-2 text-gray-500">Estado: {{voluntarios[index].estado}}</p>
                           </div>
@@ -187,12 +187,13 @@ export default ({
           // Se crea un marcador por cada punto
             let p = [point.latitud, point.longitud];
             let marker = L.marker(p, {icon:myIcon}) //se define el ícono del marcador
-                          .bindPopup(point.nombre);
+                          .bindPopup("<b>Nombre: </b>"+point.nombre+" "+point.apellido + "<br>" + "<b>Correo: </b>"+point.correo);
 
             marker.addTo(this.mymap);
             this.voluntariosEmergencia.push(marker);
 
           });
+          this.mymap.setView([-33.456, -70.648], 4);
         }catch (error) {
           console.log("error", error);
         }
