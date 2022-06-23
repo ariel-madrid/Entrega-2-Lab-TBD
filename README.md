@@ -22,3 +22,10 @@ en el puerto http://localhost:3000/ y se podra utilizar el front de la entrega.
 Los commits asociados a cada integrante del grupo se pueden observar en la presentacion entregada. Se crea este nuevo respositorio por un tema de formalidad mas que nada y mantener un orden en las entregas.
 
 Ademas para acceder a la base de datos, el usuario y la contraseña deben cambiarse en el codigo para poder tener los datos solicitados de la base de datos.
+
+Para finalizar se debe tener en considerancion lo siguiente para el backup:</br>
+Formato credenciales de los voluntarios:</br>
+
+Correo1@gmail.com, Correo2@gmail.com, Correo3@gmail.com, etc... Todos los voluntarios tienen la clave 123.</br>
+
+Coordinador registrado: Primer Coordinador - Clave: 123</br>
